@@ -3,13 +3,12 @@ package com.qrofeus.musicplayer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.song_desc.view.*
@@ -40,11 +39,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Call Media Player for selected song
+    @Suppress("DEPRECATION")
     @SuppressLint("InlinedApi") //Suppresses this -> @RequiresApi(Build.VERSION_CODES.R)
     private fun loadSongs() {
         //External Storage URI (Uniform Resource Identifier)
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val select = MediaStore.Audio.Media.IS_MUSIC + "!=0"
+        val select = """${MediaStore.Audio.Media.IS_MUSIC}!=0"""
 
         //Sort through all files from External for Music files
         val rs = contentResolver.query(uri, null, select, null, null)
@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         list_songs.adapter = adapter
 
         list_songs.setOnItemClickListener { _, _, position, _ ->
-            Toast.makeText(this, "Item Clicked", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, AudioPlayer::class.java)
                 .putExtra("filePath", songsList[position].path).putExtra("title", songsList[position].title)
                 .putExtra("artist", songsList[position].artist)
@@ -70,11 +69,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Adapter Class - Song_ArrayList to ListView
-    inner class SongAdapter : BaseAdapter{
-        private var listofSongs = ArrayList<SongDesc>()
-        constructor(listofSongs: ArrayList<SongDesc>) : super() {
-            this.listofSongs = listofSongs
-        }
+    inner class SongAdapter(private var listofSongs: ArrayList<SongDesc>) : BaseAdapter() {
 
         override fun getCount(): Int {
             return listofSongs.size
