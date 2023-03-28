@@ -4,6 +4,7 @@ An android audio-player built using MediaPlayer and MediaStore interfaces.
 
 ## Feature
 
+- Lists all music files stored in external storage in the application.
 - Plays the selected audio file. Nothing more, nothing less.
 
 File extensions allowed are limited to the MediaStore support. For each audio file in the external storage `MediaStore.Audio.Media.IS_MUSIC` flag is checked to determine whether or not that file is considered a music file. [MediaStore.Audio.AudioColumns interface details](https://developer.android.com/reference/android/provider/MediaStore.Audio.AudioColumns#IS_MUSIC)
